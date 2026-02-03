@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for film in list %}
+<div style="width: auto;">
+    <p> {{ film.name }} </p>
+    <a href="/film/{{film.id}}/" class="btn btn-primary">Посмотреть</a>
+
+</div>
+{% endfor %}
+{% endblock %}
