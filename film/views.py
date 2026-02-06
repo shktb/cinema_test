@@ -1,6 +1,6 @@
 from django.http import HttpResponse
-from django.shortcuts import render
-from film.models import Film
+from django.shortcuts import render, redirect
+from film.models import Film, Category
 
 
 # select * from product;
@@ -26,13 +26,31 @@ from film.models import Film
 # Create your views here.
 
 def film_list(request):
-    films = Film.objects.all()
-    return render(request, 'films_templates/film_list.html', context={'list':films})
+    if request.method == "GET":
+        films = Film.objects.all()
+        category_id = request.GET.get("category_id")
+        if category_id:
+            films = Film.objects.filter(category_id=category_id)
+        return render(request, 'films_templates/film_list.html', context={'list':films})
 
+def film_create(request):
+    if request.method == "GET":
+        return render(request, "films_templates/film_create.html")
+    elif request.method == "POST":
+        print(request.POST)
+        Film.objects.create(
+            name=request.POST.get("name"),
+            descriptions=request.POST.get("description"),
+        )
+        return redirect("/film/")
+    
 def film_detail(request, film_id):
-    film = Film.objects.get(id=film_id)
-    return render(request, 'films_templates/film_detail.html', context={'film':film})
+    if request.method == "GET":
+        film = Film.objects.get(id=film_id)
+        return render(request, 'films_templates/film_detail.html', context={'film':film})
 
 def base(request):
-    return render(request, 'base.html')
+    if request.method == "GET":
+        category = Category.objects.all()
+        return render(request, 'base.html', context={"category" : category})
 

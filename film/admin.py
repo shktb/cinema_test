@@ -1,9 +1,10 @@
 from django.contrib import admin
-from film.models import Film, Category
+from film.models import Film, Category, Genre
 
 # Register your models here.
 
 admin.site.register(Category)
+admin.site.register(Genre)
 
 @admin.register(Film)
 class FilmAdmin(admin.ModelAdmin):

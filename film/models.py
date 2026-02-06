@@ -7,13 +7,18 @@ class Category(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
     
+class Genre(models.Model):
+    name = models.CharField(max_length=255)
+    def __str__(self):
+        return f"{self.name}"
 
 class Film(models.Model):
     name = models.CharField(max_length=255)
     year = models.IntegerField(default=0)
-    genre = models.CharField(max_length=255)
+    image = models.ImageField(null=True, blank=True, upload_to='films/')
+    genre = models.ManyToManyField(Genre, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     descriptions = models.TextField()
 
@@ -21,4 +26,4 @@ class Film(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.year}"
