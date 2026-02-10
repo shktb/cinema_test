@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from film.models import Film, Category
-
+from film.forms import AddFilmForm
 
 # select * from product;
 # Product.objects.all()
@@ -35,15 +35,19 @@ def film_list(request):
 
 def film_create(request):
     if request.method == "GET":
-        return render(request, "films_templates/film_create.html")
+        forms = AddFilmForm()
+        return render(request, "films_templates/film_create.html", context={"forms": forms})
     elif request.method == "POST":
-        print(request.POST)
-        Film.objects.create(
-            name=request.POST.get("name"),
-            descriptions=request.POST.get("description"),
-        )
-        return redirect("/film/")
-    
+        forms = AddFilmForm(request.POST, request.FILES)
+        if forms.is_valid():
+            Film.objects.create(
+                name=forms.cleaned_data.get("name"),
+                descriptions=forms.cleaned_data.get("description"),
+                year=forms.cleaned_data.get("year"),
+                image=forms.cleaned_data.get('image'),
+            )
+            return redirect("/film/")
+        return HttpResponse("error")
 def film_detail(request, film_id):
     if request.method == "GET":
         film = Film.objects.get(id=film_id)
