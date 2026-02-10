@@ -5,6 +5,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
+# Аунтентификация - поиск пользователя в бд
+# Авторизация - проверка прав доступа пользователя 
+# Регистрация - создание нового пользователя
+
+
 def register(request):
     if request.method == "GET":
         forms = RegisterForms()
