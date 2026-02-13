@@ -3,6 +3,13 @@ from django.db import models
 # Create your models here.
 
 # ORM Object Relational Mapping
+
+# OneToMany - одна категория - много продуктов
+# ManyToMany - много Тэг - много продуктов
+# OneToOne - один Пользователь - одна Профиль
+
+# FK - Foreign Key
+
 class Category(models.Model):
     name = models.CharField(max_length=255)
 

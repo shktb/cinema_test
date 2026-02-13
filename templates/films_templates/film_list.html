@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<form method="GET" action="" enctype="multipart/form-data">
+    {{ forms.as_p }}
+    <button type="submit">Поиск</button>
+</form>
+
 {% for film in list %}
     
 <div class="card mb-3" style="max-width: 540px;">
