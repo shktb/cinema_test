@@ -24,9 +24,21 @@
         <p class="card-text">Описание: {{ film.descriptions }}</p>
         <p class="card-text"><small class="text-body-secondary">Год: {{ film.year }}</small></p>
         <a href="/film/{{film.id}}/" class="btn btn-primary">Посмотреть</a>
+        <a href="/film_delete/{{film.id}}" class="btn btn-primary">Удалить</a>
       </div>
     </div>
   </div>
 </div>
 {% endfor %}
+
+<nav aria-label="...">
+    <ul class="pagination pagination-lg">
+        {% for page in list_pages %}
+        <li class="page-item">
+            <a class="page-link" aria-current="page" href="/film/?page={{ page }}">{{ page }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+
 {% endblock %}

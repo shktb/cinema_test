@@ -13,6 +13,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+             <a class="nav-link" href="/profile/">Profile</a>
+         </li>
+        {%else%}
+        <li class="nav-item">
+             <a class="nav-link" href="/login/">Profile</a>
+         </li>
+        {%endif%}
         <li class="nav-item">
           <a class="nav-link" href="/film/">Films</a>
         </li>

@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import Profile
 
 # Create your models here.
 
@@ -22,6 +23,7 @@ class Genre(models.Model):
         return f"{self.name}"
 
 class Film(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255)
     year = models.IntegerField(default=0)
     image = models.ImageField(null=True, blank=True, upload_to='films/')

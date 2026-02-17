@@ -4,6 +4,7 @@ from django.db.models import Q
 from film.models import Film, Category
 from film.forms import AddFilmForm, SearchForm
 from django.contrib.auth.decorators import login_required
+import math
 
 # select * from product;
 # Product.objects.all()
@@ -28,6 +29,9 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def film_list(request):
+
+    limit = 3
+
     if request.method == "GET":
         films = Film.objects.all()
         forms = SearchForm()
@@ -55,7 +59,15 @@ def film_list(request):
         genre = request.GET.getlist("genre")
         if genre:
             films = Film.objects.filter(genre__in=genre)
-        return render(request, 'films_templates/film_list.html', context={'list':films, "forms": forms})
+
+        page = int(request.GET.get("page")) if request.GET.get("page") else 1
+        max_page = math.ceil(len(films) / limit)
+        start = (page - 1) * limit
+        stop = page * limit
+        list_pages = range(1, max_page + 1)
+        films = films[start:stop]
+
+        return render(request, 'films_templates/film_list.html', context={'list':films, "forms": forms, "list_pages": list_pages})
     
 @login_required(login_url="/login/")
 def film_create(request):
@@ -66,6 +78,7 @@ def film_create(request):
         forms = AddFilmForm(request.POST, request.FILES)
         if forms.is_valid():
             Film.objects.create(
+                profile=request.user.profile,
                 name=forms.cleaned_data.get("name"),
                 descriptions=forms.cleaned_data.get("description"),
                 year=forms.cleaned_data.get("year"),
@@ -73,12 +86,21 @@ def film_create(request):
             )
             return redirect("/film/")
         return HttpResponse("error")
+    
+
 
 @login_required(login_url="/login/")
 def film_detail(request, film_id):
     if request.method == "GET":
         film = Film.objects.get(id=film_id)
         return render(request, 'films_templates/film_detail.html', context={'film':film})
+    
+def film_delete(request, film_id):
+    film = Film.objects.get(id=film_id)
+    if request.user.profile != film.profile:
+        return HttpResponse("Permission denied")
+    film.delete()
+    return redirect("/film/")
 
 def base(request):
     if request.method == "GET":

@@ -16,21 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from film.views import film_list, film_detail, base, film_create
+from film.views import film_list, film_detail, base, film_create, film_delete
 from django.conf.urls import static
 from django.conf import settings
-from users.views import register, login_user, logout_user
+from users.views import register, login_user, logout_user, profile, update_profile
 films = [
     path('film/', film_list),
     path('film/<int:film_id>/', film_detail),
     path("film_create/", film_create), 
+    path("film_delete/<int:film_id>/", film_delete),
 ]
 
 users = [
     path("register/", register),
     path("login/", login_user),
-    path("logout/", logout_user)
-    ]
+    path("profile/", profile),
+    path("logout/", logout_user),
+    path("update_profile/", update_profile),
+]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
