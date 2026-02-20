@@ -23,8 +23,8 @@
         <h5 class="card-title">{{ film.name }}</h5>
         <p class="card-text">Описание: {{ film.descriptions }}</p>
         <p class="card-text"><small class="text-body-secondary">Год: {{ film.year }}</small></p>
-        <a href="/film/{{film.id}}/" class="btn btn-primary">Посмотреть</a>
-        <a href="/film_delete/{{film.id}}" class="btn btn-primary">Удалить</a>
+        <a href="{% url 'film_detail' film_id=film.id %}" class="btn btn-primary">Посмотреть</a>
+        <a href="{% url 'film_delete' film_id=film.id %}" class="btn btn-primary">Удалить</a>
       </div>
     </div>
   </div>
@@ -33,11 +33,23 @@
 
 <nav aria-label="...">
     <ul class="pagination pagination-lg">
-        {% for page in list_pages %}
-        <li class="page-item">
-            <a class="page-link" aria-current="page" href="/film/?page={{ page }}">{{ page }}</a>
-        </li>
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Назад</a>
+            </li>
+        {% endif %}
+
+        {% for p in paginator.page_range %}
+            <li class="page-item {% if page_obj.number == p %}active{% endif %}">
+                <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+            </li>
         {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперед</a>
+            </li>
+        {% endif %}
     </ul>
 </nav>
 
